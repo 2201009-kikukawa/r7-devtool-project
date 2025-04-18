@@ -35,7 +35,7 @@ npm install -g yo generator-code
 > n
 
 ? Which bundler to use?
-> ?
+> unbundled
 
 ? Which package manager to use?
 > npm
