@@ -42,3 +42,14 @@ npm install -g yo generator-code
 
 ? Do you want to open the new folder with Visual Studio Code?
 > Open
+
+## デバッグ方法
+
+- デバッグしたい拡張機能をvscodeで開く
+- 左のサイドバーから「実行とデバッグ」押下
+- 緑色の三角ボタンを押す
+- 別ウィンドウで開かれるvscodeで確認する
+  - コマンド実行は ctrl + shift + P からコマンドパレットを開いて実行
+
+https://github.com/user-attachments/assets/87f16fa6-d68b-4cba-b252-8b555f64e581
+
