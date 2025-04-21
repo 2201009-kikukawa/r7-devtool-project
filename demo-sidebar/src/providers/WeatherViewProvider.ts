@@ -20,19 +20,19 @@ export class WeatherViewProvider implements WebviewViewProvider {
     context: WebviewViewResolveContext,
     _token: CancellationToken
   ) {
-    // Allow scripts in the webview
+    // webviewでスクリプトを許可する
     webviewView.webview.options = {
-      // Enable JavaScript in the webview
+      // webviewでJavaScriptを有効にする
       enableScripts: true,
-      // Restrict the webview to only load resources from the `out` directory
+      // webviewが`out`ディレクトリからのみリソースを読み込むように制限する
       localResourceRoots: [Uri.joinPath(this._extensionUri, "out")],
     };
 
-    // Set the HTML content that will fill the webview view
+    // webviewビューを埋めるHTMLコンテンツを設定する
     webviewView.webview.html = this._getWebviewContent(webviewView.webview, this._extensionUri);
 
-    // Sets up an event listener to listen for messages passed from the webview view context
-    // and executes code based on the message that is recieved
+    // webviewビューコンテキストから渡されたメッセージをリッスンするイベントリスナーを設定し、
+    // 受信したメッセージに基づいてコードを実行する
     this._setWebviewMessageListener(webviewView);
   }
 
@@ -41,7 +41,7 @@ export class WeatherViewProvider implements WebviewViewProvider {
     const stylesUri = getUri(webview, extensionUri, ["out", "styles.css"]);
     const nonce = getNonce();
 
-    // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
+    // ヒント: 以下のコードのハイライトを有効にするには、es6-string-html VS Code拡張機能をインストールしてください
     return /*html*/ `
 			<!DOCTYPE html>
 			<html lang="en">
@@ -90,13 +90,13 @@ export class WeatherViewProvider implements WebviewViewProvider {
             if (err) {
               webviewView.webview.postMessage({
                 command: "error",
-                message: "Sorry couldn't get weather at this time...",
+                message: "申し訳ありませんが、現在天気情報を取得できません...",
               });
               return;
             }
-            // Get the weather forecast results
+            // 天気予報の結果を取得する
             const weatherForecast = result[0];
-            // Pass the weather forecast object to the webview
+            // 天気予報オブジェクトをwebviewに渡す
             webviewView.webview.postMessage({
               command: "weather",
               payload: JSON.stringify(weatherForecast),
