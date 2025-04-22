@@ -13,7 +13,7 @@ import * as weather from "weather-js";
 export class WeatherViewProvider implements WebviewViewProvider {
   public static readonly viewType = "weather.weatherView";
 
-  constructor(private readonly _extensionUri: Uri) {}
+  constructor(private readonly _extensionUri: Uri) { }
 
   public resolveWebviewView(
     webviewView: WebviewView,
@@ -41,41 +41,22 @@ export class WeatherViewProvider implements WebviewViewProvider {
     const stylesUri = getUri(webview, extensionUri, ["out", "styles.css"]);
     const nonce = getNonce();
 
-    // ヒント: 以下のコードのハイライトを有効にするには、es6-string-html VS Code拡張機能をインストールしてください
     return /*html*/ `
-			<!DOCTYPE html>
-			<html lang="en">
-				<head>
-					<meta charset="UTF-8">
-					<meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
-					<link rel="stylesheet" href="${stylesUri}">
-					<title>Weather Checker</title>
-				</head>
-				<body>
-          <h1>Weather Checker</h1>
-          <section id="search-container">
-            <vscode-text-field
-              id="location"
-              placeholder="Location"
-              value="Seattle, WA">
-            </vscode-text-field>
-            <vscode-dropdown id="unit">
-              <vscode-option value="F">Fahrenheit</vscode-option>
-              <vscode-option value="C">Celsius</vscode-option>
-            </vscode-dropdown>
-          </section>
-          <vscode-button id="check-weather-button">Check</vscode-button>
-          <h2>Current Weather</h2>
-          <section id="results-container">
-            <vscode-progress-ring id="loading" class="hidden"></vscode-progress-ring>
-            <p id="icon"></p>
-            <p id="summary"></p>
-          </section>
+          <link rel="stylesheet" href="${stylesUri}" />
+          <title>Weather Checker</title>
+        </head>
+        <body>
+          <div id="root"></div>
           <script type="module" nonce="${nonce}" src="${webviewUri}"></script>
-				</body>
-			</html>
-		`;
+        </body>
+      </html>
+    `;
   }
 
   private _setWebviewMessageListener(webviewView: WebviewView) {

@@ -9,14 +9,6 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "camelcase": [
-      "error",
-      {
-        "allow": [
-          "WeatherApp"
-        ]
-      }
-    ],
     "@typescript-eslint/naming-convention": "warn",
     "@typescript-eslint/semi": "warn",
     "curly": "warn",
@@ -24,6 +16,16 @@
     "no-throw-literal": "warn",
     "semi": "off"
   },
+  "overrides": [
+    {
+      "files": [
+        "./src/webview/main.tsx"
+      ],
+      "rules": {
+        "@typescript-eslint/naming-convention": "off"
+      }
+    }
+  ],
   "ignorePatterns": [
     "out",
     "dist",

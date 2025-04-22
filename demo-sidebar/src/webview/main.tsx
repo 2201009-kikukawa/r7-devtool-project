@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom/client";
 import {
     VSCodeButton,
     VSCodeTextField,
@@ -14,9 +15,9 @@ declare const acquireVsCodeApi: () => {
 const vscode = acquireVsCodeApi();
 
 // 🌤 メインコンポーネント
-const WeatherApp: React.FC = () => {
-    const locationRef = useRef<any>(null);
-    const unitRef = useRef<any>(null);
+const main: React.FC = () => {
+    const [location, setLocation] = useState("USA");
+    const [unit, setUnit] = useState("metric");
 
     const [loading, setLoading] = useState(false);
     const [iconVisible, setIconVisible] = useState(false);
@@ -24,15 +25,15 @@ const WeatherApp: React.FC = () => {
     const [summary, setSummary] = useState("");
 
     const checkWeather = () => {
-        if (locationRef.current && unitRef.current) {
+        if (location && unit) {
             setLoading(true);
             setIconVisible(false);
             setSummary("天気情報を取得中...");
 
             vscode.postMessage({
                 command: "weather",
-                location: (locationRef.current as any)?.value,
-                unit: (unitRef.current as any)?.value,
+                location: location,
+                unit: unit,
             });
         }
     };
@@ -65,8 +66,8 @@ const WeatherApp: React.FC = () => {
 
     return (
         <div style={{ padding: "1rem", fontFamily: "sans-serif" }}>
-            <VSCodeTextField ref={locationRef} placeholder="Location" />
-            <VSCodeDropdown ref={unitRef}>
+            <VSCodeTextField value={location} onchange={(e: any) => setLocation(e.target.value)} placeholder="Location" />
+            <VSCodeDropdown value={unit} onchange={(e: any) => setUnit(e.target.value)}>
                 <VSCodeOption value="metric">Celsius</VSCodeOption>
                 <VSCodeOption value="imperial">Fahrenheit</VSCodeOption>
             </VSCodeDropdown>
@@ -80,12 +81,13 @@ const WeatherApp: React.FC = () => {
 };
 
 const getWeatherSummary = (weatherData: any) => {
-    const { skyText, temperature, degreeType } = weatherData.current;
-    return `${skyText}, ${temperature}°${degreeType}`;
+    const { skytext, temperature } = weatherData.current;
+    const degreeType = weatherData.location.degreetype;
+    return `${skytext}, ${temperature}°${degreeType}`;
 };
 
 const getWeatherIcon = (weatherData: any) => {
-    const skyText = weatherData.current.skyText.toLowerCase();
+    const skyText = weatherData.current.skytext.toLowerCase();
 
     switch (skyText) {
         case "sunny":
@@ -108,4 +110,7 @@ const getWeatherIcon = (weatherData: any) => {
     }
 };
 
-export default WeatherApp;
+export default main;
+
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+root.render(React.createElement(main));
