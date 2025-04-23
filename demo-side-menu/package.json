@@ -9,11 +9,20 @@
   "main": "./out/extension.js",
   "contributes": {
     "views": {
-      "explorer": [
+      "weather-view": [
         {
           "type": "webview",
           "id": "weather.weatherView",
           "name": "Weather"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "weather-view",
+          "title": "Weather",
+          "icon": "./resources/webview_icon.svg"
         }
       ]
     }
