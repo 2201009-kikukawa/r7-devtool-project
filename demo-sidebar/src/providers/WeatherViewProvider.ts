@@ -8,12 +8,12 @@ import {
 } from "vscode";
 import { getUri } from "../utilities/getUri";
 import { getNonce } from "../utilities/getNonce";
-import * as weather from "weather-js";
+import { WeatherViewService } from "../services/weatherViewService";
 
 export class WeatherViewProvider implements WebviewViewProvider {
   public static readonly viewType = "weather.weatherView";
 
-  constructor(private readonly _extensionUri: Uri) { }
+  constructor(private readonly _extensionUri: Uri) {}
 
   public resolveWebviewView(
     webviewView: WebviewView,
@@ -33,7 +33,7 @@ export class WeatherViewProvider implements WebviewViewProvider {
 
     // webviewビューコンテキストから渡されたメッセージをリッスンするイベントリスナーを設定し、
     // 受信したメッセージに基づいてコードを実行する
-    this._setWebviewMessageListener(webviewView);
+    WeatherViewService.setupMessageListener(webviewView);
   }
 
   private _getWebviewContent(webview: Webview, extensionUri: Uri) {
@@ -57,34 +57,5 @@ export class WeatherViewProvider implements WebviewViewProvider {
         </body>
       </html>
     `;
-  }
-
-  private _setWebviewMessageListener(webviewView: WebviewView) {
-    webviewView.webview.onDidReceiveMessage((message) => {
-      const command = message.command;
-      const location = message.location;
-      const unit = message.unit;
-
-      switch (command) {
-        case "weather":
-          weather.find({ search: location, degreeType: unit }, (err: any, result: any) => {
-            if (err) {
-              webviewView.webview.postMessage({
-                command: "error",
-                message: "申し訳ありませんが、現在天気情報を取得できません...",
-              });
-              return;
-            }
-            // 天気予報の結果を取得する
-            const weatherForecast = result[0];
-            // 天気予報オブジェクトをwebviewに渡す
-            webviewView.webview.postMessage({
-              command: "weather",
-              payload: JSON.stringify(weatherForecast),
-            });
-          });
-          break;
-      }
-    });
   }
 }
