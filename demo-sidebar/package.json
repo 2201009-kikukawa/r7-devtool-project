@@ -40,7 +40,11 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
     "@vscode/webview-ui-toolkit": "^1.2.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "weather-js": "^2.0.0"
   }
 }
